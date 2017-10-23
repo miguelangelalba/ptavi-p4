@@ -30,7 +30,7 @@ if __name__ == '__main__':
     try:
         SERVER = sys.argv[1]
         PORT = int(sys.argv[2])
-        LINE = sys.argv[3]
+        LINE = " ".join(sys.argv[3:])
 
     except (IndexError):
         sys.exit("Usage: server,port,line")
