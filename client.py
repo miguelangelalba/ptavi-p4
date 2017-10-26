@@ -17,8 +17,10 @@ def comunication (server,port,line):
 
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
         my_socket.connect((SERVER, PORT))
-        print("Enviando:", LINE)
-        my_socket.send(bytes(LINE, 'utf-8') + b'\r\n')
+        print("Enviando:", line)
+        info = line.split(" ")
+        msg_to_send = "REGISTER " + "sip:" + info[1] +" SIP/2.0"
+        my_socket.send(bytes(msg_to_send, 'utf-8') + b'\r\n\r\n')
         data = my_socket.recv(1024)
         print('Recibido -- ', data.decode('utf-8'))
 
@@ -30,9 +32,9 @@ if __name__ == '__main__':
     try:
         SERVER = sys.argv[1]
         PORT = int(sys.argv[2])
-        LINE = " ".join(sys.argv[3:])
+        line = " ".join(sys.argv[3:])
 
     except (IndexError):
         sys.exit("Usage: server,port,line")
 
-    comunication(SERVER,PORT,LINE)
+    comunication(SERVER,PORT,line)

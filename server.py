@@ -21,13 +21,13 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
         """
         line = self.rfile.read().decode('utf-8').split(" ")
         if line[0] == "REGISTER":
-            self.wfile.write(b"Hemos recibido tu peticion")
-
             usuario = {
                 "cliente": line[1][line[1].find(":")+ 1:],
                 "ip": self.client_address
             }
             print(usuario)
+            self.wfile.write(b"SIP/2.0 200 OK\r\n\r\n")
+
         #for line in self.rfile:
         #    print("El cliente nos manda ", line.decode('utf-8'))
         #    print (self.client_address)
