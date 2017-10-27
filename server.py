@@ -13,8 +13,7 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
     """
     Echo server class
     """
-    lista_usuarios = []
-
+    users = {}
     def handle(self):
         """
         handle method of the server class
@@ -30,7 +29,8 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
                 "ip": self.client_address,
                 "expires": expires#[:line[4].find("\")]
             }
-            print(usuario)
+            self.users[cliente] = usuario
+            print(self.users)
             self.wfile.write(b"SIP/2.0 200 OK\r\n\r\n")
             expires_time = time.gmtime(int(time.time()) + expires)
             print (time.strftime("%Y-%m-%d %H:%M:%S", expires_time))
@@ -50,6 +50,8 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
                 sort_keys=True,
                 indent=4, separators=(' ', ': '))
 
+    def json2registered (self):
+        pass
 
 
 if __name__ == "__main__":
