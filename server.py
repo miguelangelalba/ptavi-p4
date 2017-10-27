@@ -12,7 +12,7 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
     """
     Echo server class
     """
-    usuarios = []
+    lista_usuarios = []
 
     def handle(self):
         """
@@ -20,10 +20,13 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
         (all requests will be handled by this method)
         """
         line = self.rfile.read().decode('utf-8').split(" ")
+        usuarios = []
         if line[0] == "REGISTER":
+            cliente = line[1][line[1].find(":") + 1:]
             usuario = {
-                "cliente": line[1][line[1].find(":")+ 1:],
-                "ip": self.client_address
+                "cliente": line[1][line[1].find(":") + 1:],
+                "ip": self.client_address,
+                "expires": int(line[4])#[:line[4].find("\")]
             }
             print(usuario)
             self.wfile.write(b"SIP/2.0 200 OK\r\n\r\n")

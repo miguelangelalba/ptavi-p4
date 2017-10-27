@@ -20,7 +20,7 @@ def comunication (server,port,sip_type,name,expires_value):
         #print("Enviando:", line)
         #info = line.split(" ")
         msg_to_send = "REGISTER " + "sip:" + name +" SIP/2.0" + "\r\n"
-        msg_to_send = msg_to_send + "Expires:" + expires_value + "\r\n"
+        msg_to_send = msg_to_send + " Expires: " + expires_value + "\r\n"
         my_socket.send(bytes(msg_to_send, 'utf-8') + b'\r\n')
         data = my_socket.recv(1024)
         print('Recibido -- ', data.decode('utf-8'))
