@@ -36,7 +36,6 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
                 del self.users[cliente]
             self.wfile.write(b"SIP/2.0 200 OK\r\n\r\n")
         for user in self.users:
-            print (self.users[user])
             if self.users[user]["expires"] < time_now:
                 del_users.append(user)
         for user in del_users:
@@ -54,7 +53,7 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
                 sort_keys=True,
                 indent=4, separators=(',', ': '))
 
-    @classmethod
+    @classmethod #Gracias a esto puedo acceder al método
     def json2registered (self):
         try:
             fich_json = open("registered.json", "r")
@@ -65,8 +64,7 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
             self.users = {}
 
 if __name__ == "__main__":
-    # Listens at localhost ('') port 6001
-    # and calls the EchoHandler class to manage the request
+
     try:
         port = int(sys.argv[1])
     except (IndexError):
