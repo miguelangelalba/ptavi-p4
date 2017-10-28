@@ -45,6 +45,9 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
 
 
     def register2json(self):
+        """
+        Crea un archivo .json del dicionario de usuarios
+        """
 
         with open("registered.json", "w") as fich_json:
             json.dump(
@@ -55,6 +58,10 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
 
     @classmethod #Gracias a esto puedo acceder al método
     def json2registered (self):
+        """
+        Comprueba la exstencia de un archivo .json para crear un diccionario
+        de usuarios a partir de este
+        """
         try:
             fich_json = open("registered.json", "r")
             self.users = json.load(fich_json)
