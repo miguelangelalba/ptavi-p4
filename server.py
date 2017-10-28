@@ -30,13 +30,10 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
                 "address": self.client_address[0],
                 "expires":time.strftime("%Y-%m-%d %H:%M:%S",expires_time)
                 }
-            #Meto primero el usuario por si diese la casualidad de que no
-            #estaba dado de alta en el servidor, así no me da error al borrar
             self.users[cliente] = usuario
 
             if int(line[4]) == 0:
                 del self.users[cliente]
-
             self.wfile.write(b"SIP/2.0 200 OK\r\n\r\n")
         for user in self.users:
             print (self.users[user])
@@ -49,32 +46,38 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
 
 
     def register2json(self):
-        #if namejson == "":
-        #    namejson = "registered" + ".json"
-        name_json = "registered.json"
-        with open(name_json, "w") as fich_json:
+
+        with open("registered.json", "w") as fich_json:
             json.dump(
                 self.users,
                 fich_json,
                 sort_keys=True,
-                indent=4, separators=(' ', ': '))
+                indent=4, separators=(',', ': '))
 
+    @classmethod
     def json2registered (self):
-        pass
-
+        try:
+            fich_json = open("registered.json", "r")
+            self.users = json.load(fich_json)
+            print ("lo he pillado")
+            print (self.users)
+        except:
+            self.users = {}
 
 if __name__ == "__main__":
     # Listens at localhost ('') port 6001
     # and calls the EchoHandler class to manage the request
     try:
-        PORT = int(sys.argv[1])
+        port = int(sys.argv[1])
     except (IndexError):
         sys.exit("Usage:port")
 
-    serv = socketserver.UDPServer(('', PORT), SIPRegisterHandler)
+    SIPRegisterHandler.json2registered()
+    serv = socketserver.UDPServer(('', port), SIPRegisterHandler)
 
     print("Lanzando servidor UDP de eco...")
     try:
         serv.serve_forever()
+
     except KeyboardInterrupt:
         print("Finalizado servidor")
