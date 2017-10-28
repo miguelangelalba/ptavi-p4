@@ -7,6 +7,7 @@ Clase (y programa principal) para un servidor de eco en UDP simple
 import socketserver
 import sys
 import time
+import json
 
 
 class SIPRegisterHandler(socketserver.DatagramRequestHandler):
@@ -23,29 +24,28 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
         usuarios = []
         if line[0] == "REGISTER":
             cliente = line[1][line[1].find(":") + 1:]
-            expires = int(line[4])
+            expires_time = time.gmtime(int(time.time()) + int(line[4]))
+
             usuario = {
-                "cliente": line[1][line[1].find(":") + 1:],
-                "ip": self.client_address,
-                "expires": expires#[:line[4].find("\")]
-            }
+                "address": self.client_address[0],
+                "expires":time.strftime("%Y-%m-%d %H:%M:%S",expires_time)
+                }
             self.users[cliente] = usuario
             print(self.users)
             self.wfile.write(b"SIP/2.0 200 OK\r\n\r\n")
-            expires_time = time.gmtime(int(time.time()) + expires)
-            print (time.strftime("%Y-%m-%d %H:%M:%S", expires_time))
             print (time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(time.time())))
+            self.register2json()
 
         #for line in self.rfile:
         #    print("El cliente nos manda ", line.decode('utf-8'))
         #    print (self.client_address)
-    def register2json(self,usuario):
+    def register2json(self):
         #if namejson == "":
         #    namejson = "registered" + ".json"
         name_json = "registered.json"
         with open(name_json, "w") as fich_json:
             json.dump(
-                self.lista,
+                self.users,
                 fich_json,
                 sort_keys=True,
                 indent=4, separators=(' ', ': '))
