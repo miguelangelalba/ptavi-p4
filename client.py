@@ -7,15 +7,15 @@ Programa cliente UDP que abre un socket a un servidor
 import socket
 import sys
 
-def comunication (server,port,sip_type,name,expires_value):
+
+def comunication(server, port, sip_type, name, expires_value):
     """
     Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
     """
 
-
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
         my_socket.connect((server, port))
-        msg_to_send = "REGISTER " + "sip:" + name +" SIP/2.0" + "\r\n"
+        msg_to_send = "REGISTER " + "sip:" + name + " SIP/2.0" + "\r\n"
         msg_to_send = msg_to_send + " Expires: " + expires_value + "\r\n"
         my_socket.send(bytes(msg_to_send, 'utf-8') + b'\r\n')
         data = my_socket.recv(1024)
@@ -27,8 +27,9 @@ def comunication (server,port,sip_type,name,expires_value):
 if __name__ == '__main__':
 
     if len(sys.argv) != 6:
-        sys.exit("Usage: client.py ip puerto register sip_address " + \
-        "expires_value")
+        sys.exit(
+            "Usage: client.py ip puerto register sip_address " +
+            "expires_value")
     try:
         server = sys.argv[1]
         port = int(sys.argv[2])
@@ -39,4 +40,4 @@ if __name__ == '__main__':
     except (IndexError):
         sys.exit("Usage: server,port,line")
 
-    comunication(server,port,sip_type,name,expires_value)
+    comunication(server, port, sip_type, name, expires_value)

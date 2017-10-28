@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+
 """
-Clase (y programa principal) para un servidor de eco en UDP simple
+Clase (y programa principal) para un servidor
 """
 
 import socketserver
@@ -11,11 +12,15 @@ import json
 
 
 class SIPRegisterHandler(socketserver.DatagramRequestHandler):
+
     """
     Echo server class
     """
+
     users = {}
+
     def handle(self):
+
         """
         handle method of the server class
         (all requests will be handled by this method)
@@ -28,7 +33,7 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
             expires_time = time.gmtime(int(time.time()) + int(line[4]))
             usuario = {
                 "address": self.client_address[0],
-                "expires":time.strftime("%Y-%m-%d %H:%M:%S",expires_time)
+                "expires": time.strftime("%Y-%m-%d %H:%M:%S", expires_time)
                 }
             self.users[cliente] = usuario
 
@@ -43,12 +48,11 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
 
         self.register2json()
 
-
     def register2json(self):
+
         """
         Crea un archivo .json del dicionario de usuarios
         """
-
         with open("registered.json", "w") as fich_json:
             json.dump(
                 self.users,
@@ -56,8 +60,10 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
                 sort_keys=True,
                 indent=4, separators=(',', ': '))
 
-    @classmethod #Gracias a esto puedo acceder al método
-    def json2registered (self):
+    #Gracias a esto puedo acceder al método desde el programa principal
+    @classmethod
+    def json2registered(self):
+
         """
         Comprueba la exstencia de un archivo .json para crear un diccionario
         de usuarios a partir de este
