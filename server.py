@@ -21,8 +21,8 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
         (all requests will be handled by this method)
         """
         line = self.rfile.read().decode('utf-8').split(" ")
-
-
+        time_now = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(time.time()))
+        del_users = []
         if line[0] == "REGISTER":
             cliente = line[1][line[1].find(":") + 1:]
             expires_time = time.gmtime(int(time.time()) + int(line[4]))
@@ -31,15 +31,21 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
                 "expires":time.strftime("%Y-%m-%d %H:%M:%S",expires_time)
                 }
             #Meto primero el usuario por si diese la casualidad de que no
-            #estava dado de alta en el servidor, así no me da error al borrar
+            #estaba dado de alta en el servidor, así no me da error al borrar
             self.users[cliente] = usuario
+
             if int(line[4]) == 0:
                 del self.users[cliente]
 
-            print(self.users)
             self.wfile.write(b"SIP/2.0 200 OK\r\n\r\n")
-            print (time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(time.time())))
-            self.register2json()
+        for user in self.users:
+            print (self.users[user])
+            if self.users[user]["expires"] < time_now:
+                del_users.append(user)
+        for user in del_users:
+            del self.users[user]
+
+        self.register2json()
 
 
     def register2json(self):
