@@ -22,7 +22,7 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
     def handle(self):
 
         """
-        handle method of the server class
+        Handle method of the server class
         (all requests will be handled by this method)
         """
         line = self.rfile.read().decode('utf-8').split(" ")
@@ -60,7 +60,7 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
                 sort_keys=True,
                 indent=4, separators=(',', ': '))
 
-    #Gracias a esto puedo acceder al método desde el programa principal
+    # Gracias a esto puedo acceder al método desde el programa principal
     @classmethod
     def json2registered(self):
 
@@ -71,8 +71,8 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
         try:
             fich_json = open("registered.json", "r")
             self.users = json.load(fich_json)
-            print ("lo he pillado")
-            print (self.users)
+            # print("lo he pillado")
+            # print(self.users)
         except:
             self.users = {}
 
