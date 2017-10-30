@@ -1,15 +1,14 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-"""
-Programa cliente UDP que abre un socket a un servidor.
-"""
+"""Programa cliente UDP que abre un socket a un servidor."""
 
 import socket
 import sys
 
 
 def comunication(server, port, sip_type, name, expires_value):
-    """
+    u"""Comunicación cliente/servidor.
+
     Creamos el socket, lo configuramos y lo atamos a un servidor/puerto.
     """
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
