@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-
 """
-Clase (y programa principal) para un servidor
+Clase (y programa principal) para un servidor.
 """
 
 import socketserver
@@ -12,18 +11,16 @@ import json
 
 
 class SIPRegisterHandler(socketserver.DatagramRequestHandler):
-
     """
-    Echo server class
+    Echo server class.
     """
 
     users = {}
 
     def handle(self):
-
         """
-        Handle method of the server class
-        (all requests will be handled by this method)
+        Handle method of the server class.
+        (All requests will be handled by this method).
         """
         line = self.rfile.read().decode('utf-8').split(" ")
         time_now = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(time.time()))
@@ -49,9 +46,8 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
         self.register2json()
 
     def register2json(self):
-
         """
-        Crea un archivo .json del dicionario de usuarios
+        Crea un archivo .json del dicionario de usuarios.
         """
         with open("registered.json", "w") as fich_json:
             json.dump(
@@ -63,10 +59,9 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
     # Gracias a esto puedo acceder al método desde el programa principal
     @classmethod
     def json2registered(self):
-
         """
         Comprueba la exstencia de un archivo .json para crear un diccionario
-        de usuarios a partir de este
+        de usuarios a partir de este.
         """
         try:
             fich_json = open("registered.json", "r")
